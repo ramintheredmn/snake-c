@@ -8,11 +8,11 @@ int main() {
     int quit = 0;
     while (!quit) {
         // render table 
-        printf("⊢");
-        for (int i = 0; i< COLS; i++) {
-            printf("-");
+        printf("◤");
+        for (int i = 0; i< COLS -1 ; i++) {
+            printf(".");
         }
-        printf("⊣\n");
+        printf("◥\n");
         for (int j = 0; j<ROWS; j++) {
             printf("|");
             for (int i = 0; i<COLS; i++){
@@ -21,11 +21,11 @@ int main() {
             printf("|\n");
         }
 
-        printf("⊢");
-        for (int i = 0; i< COLS; i++) {
-            printf("-");
+        printf("◣");
+        for (int i = 0; i< COLS - 1; i++) {
+            printf(".");
         }
-        printf("⊣\n");
+        printf("◢\n");
         
         printf("\e[%iA", ROWS + 2);
     }
