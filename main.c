@@ -44,8 +44,8 @@ int main() {
             printf("\e[%iF", y[tail] +1);
 
             tail = (tail + 1) % 1000;
-            int newhaed = (head + 1) % 1000;
-            x[newhaed] = (x[head] + xdir + COLS) % COLS;
+            int newhead = (head + 1) % 1000;
+            x[newhead] = (x[head] + xdir + COLS) % COLS;
             y[newhead] = (y[head] + ydir + ROWS) % ROWS;
 
             // draw snake head
