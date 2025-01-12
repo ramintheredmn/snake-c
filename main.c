@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <termio.h>
 
 #define COLS 32
 #define ROWS 16
@@ -7,6 +9,14 @@
 int main() {
     // hide curser 
     printf("\e[?25l");
+    // switch to canonical mode, disable echo
+    struct termios oldt, newt;
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+
     int quit = 0;
     int x[1000], y[1000];
     while (!quit) {
@@ -52,6 +62,9 @@ int main() {
             printf("\e[%iB\e[%iC🐍", y[head] + 1, x[head] + 1);
             printf("\e[%iF", y[head] +1);
 
+            usleep(5*1000000 / 60);
+            
+            int ch = getchar();
         }
     }
     // show curser 
