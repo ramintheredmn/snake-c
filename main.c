@@ -1,3 +1,8 @@
+/*******************
+* Ramin Rafiee     *
+* Snake Game       *
+*******************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
