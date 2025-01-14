@@ -66,6 +66,9 @@ int main() {
                 // create the new apple
                 applex = rand() % COLS;
                 appley = rand() % ROWS;
+                for (int i = tail; i != head; i = (i + 1) % 1000)
+                  if (x[i] == applex && y[i] == appley)
+                    applex = -1;
 
 
 
@@ -93,38 +96,14 @@ int main() {
             printf("\e[%iF", y[head] +1);
 
             usleep(5*1000000 / 60);
-            
-            // Read keyboard
-            struct timeval tv;
-            fd_set fds;
-            tv.tv_sec = 0;
-            tv.tv_usec = 0;
+            char ch = getchar();
 
-            FD_ZERO(&fds);
-            FD_SET(STDIN_FILENO, &fds);
-            select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv);
-            if (FD_ISSET(STDIN_FILENO, &fds)) {
-              int ch = getchar();
-              if (ch == 27 || ch == 'q') {
+            if (ch == 'q') {
                 quit = 1;
-              } else if (ch == 'h' && xdir != 1) {
-                xdir = -1;
-                ydir = 0;
-              } else if (ch == 'l' && xdir != -1) {
-                xdir = 1;
-                ydir = 0;
-              } else if (ch == 'j' && ydir != -1) {
-                xdir = 0;
-                ydir = 1;
-              } else if (ch == 'k' && ydir != 1) {
-                xdir = 0;
-                ydir = -1;
-              }
-              }
-            }
-
             }
         }
+    }
+            
     // show curser 
     printf("\e[?25h");
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
