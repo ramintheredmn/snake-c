@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/select.h>
 #include <unistd.h>
 #include <termio.h>
 
@@ -92,15 +93,39 @@ int main() {
             y[newhead] = (y[head] + ydir + ROWS) % ROWS;
 
             // draw snake head
-            printf("\e[%iB\e[%iC🐍", y[head] + 1, x[head] + 1);
+            printf("\e[%iB\e[%iC#", y[head] + 1, x[head] + 1);
             printf("\e[%iF", y[head] +1);
 
             usleep(5*1000000 / 60);
-            char ch = getchar();
+            // get user input
+            struct timeval tv;
+            tv.tv_sec = 0;
+            tv.tv_usec = 0;
+            fd_set fds;
+            FD_ZERO(&fds);
+            FD_SET(STDIN_FILENO, &fds);
 
-            if (ch == 'q') {
-                quit = 1;
+            select(STDIN_FILENO+1, &fds, NULL, NULL, &tv);
+            if (FD_ISSET(STDIN_FILENO, &fds)) {
+                int ch = getchar();
+
+                if (ch == 27 || ch == 'q') {
+                  quit = 1;
+                } else if (ch == 'h' && xdir != 1) {
+                  xdir = -1;
+                  ydir = 0;
+                } else if (ch == 'l' && xdir != -1) {
+                  xdir = 1;
+                  ydir = 0;
+                } else if (ch == 'j' && ydir != -1) {
+                  xdir = 0;
+                  ydir = 1;
+                } else if (ch == 'k' && ydir != 1) {
+                  xdir = 0;
+                  ydir = -1;
+                }
             }
+
         }
     }
             
