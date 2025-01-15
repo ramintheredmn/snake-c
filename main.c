@@ -93,7 +93,7 @@ int main() {
             y[newhead] = (y[head] + ydir + ROWS) % ROWS;
 
             // draw snake head
-            printf("\e[%iB\e[%iC#", y[head] + 1, x[head] + 1);
+            printf("\e[%iB\e[%iC🐍", y[head] + 1, x[head] + 1);
             printf("\e[%iF", y[head] +1);
 
             usleep(5*1000000 / 60);
