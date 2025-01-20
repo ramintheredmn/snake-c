@@ -125,7 +125,13 @@ int main() {
                   ydir = -1;
                 }
             }
-
+            if (!quit) {
+      // Show game over
+            printf("\e[%iB\e[%iC Game Over! ", ROWS / 2, COLS / 2 - 5);
+            printf("\e[%iF", ROWS / 2);
+            fflush(stdout);
+            getchar();
+            }
         }
     }
             
