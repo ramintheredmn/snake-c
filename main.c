@@ -70,6 +70,9 @@ int main() {
                 for (int i = tail; i != head; i = (i + 1) % 1000)
                   if (x[i] == applex && y[i] == appley)
                     applex = -1;
+                 for (int i = tail; i != head; i = (i + 1) % 1000)
+                  if (x[i] == applex && y[i] == appley)
+                    applex = -1;
 
 
 
