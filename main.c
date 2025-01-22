@@ -62,48 +62,57 @@ int main() {
         int xdir = 1, ydir = 0;
         int applex = -1, appley = 0;
 
-        while (!gameover & !quit) {
+        while (!gameover && !quit) {
             if (applex < 0) {
                 // create the new apple
                 applex = rand() % COLS;
                 appley = rand() % ROWS;
-                for (int i = tail; i != head; i = (i + 1) % 1000)
-                  if (x[i] == applex && y[i] == appley)
-                    applex = -1;
+
+
                  for (int i = tail; i != head; i = (i + 1) % 1000)
                   if (x[i] == applex && y[i] == appley)
                     applex = -1;
 
-
-
-                if (applex > 0) {
+                if (applex >= 0) {
                 // draw the apple
-                printf("\e[%iB\e[%iC🍎", y[appley] + 1, x[applex] + 1);
-                printf("\e[%iF", y[appley] + 1);
+                    printf("\e[%iB\e[%iC*", y[appley] + 1, x[applex] + 1);
+                    printf("\e[%iF", y[appley] + 1);
                 }
             }
-
-
 
             // clear snake tail
             // put a dot to the snake tail and move the curser to the snake head
             printf("\e[%iB\e[%iC.", y[tail] + 1, x[tail] + 1);
             printf("\e[%iF", y[tail] +1);
+            if (x[head] == applex && y[head] == appley) {
+                applex = -1;
+                printf("\a"); // Bell
+              } else {
+                tail = (tail + 1) % 1000;
+            }
 
-            tail = (tail + 1) % 1000;
             int newhead = (head + 1) % 1000;
             x[newhead] = (x[head] + xdir + COLS) % COLS;
             y[newhead] = (y[head] + ydir + ROWS) % ROWS;
+            head = newhead;
+
+            for (int i = tail; i != head; i = (i + 1) % 1000)
+                if (x[i] == x[head] && y[i] == y[head])
+                  gameover = 1;
+
 
             // draw snake head
-            printf("\e[%iB\e[%iC🐍", y[head] + 1, x[head] + 1);
+            printf("\e[%iB\e[%iC@", y[head] + 1, x[head] + 1);
             printf("\e[%iF", y[head] +1);
+            fflush(stdout);
 
             usleep(5*1000000 / 60);
             // get user input
             struct timeval tv;
             tv.tv_sec = 0;
             tv.tv_usec = 0;
+
+
             fd_set fds;
             FD_ZERO(&fds);
             FD_SET(STDIN_FILENO, &fds);
@@ -128,6 +137,7 @@ int main() {
                   ydir = -1;
                 }
             }
+        }
             if (!quit) {
       // Show game over
             printf("\e[%iB\e[%iC Game Over! ", ROWS / 2, COLS / 2 - 5);
@@ -135,7 +145,7 @@ int main() {
             fflush(stdout);
             getchar();
             }
-        }
+
     }
             
     // show curser 
