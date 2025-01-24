@@ -42,7 +42,7 @@ int main() {
         for (int j = 0; j<ROWS; j++) {
             printf("▮");
             for (int i = 0; i<COLS; i++){
-                printf(".");
+                printf(" ");
             }
             printf("▮\n");
         }
@@ -93,7 +93,7 @@ int main() {
 
             // clear snake tail
             // put a dot to the snake tail and move the curser to the snake head
-            printf("\e[%iB\e[%iC.", y[tail] + 1, x[tail] + 1);
+            printf("\e[%iB\e[%iC ", y[tail] + 1, x[tail] + 1);
             printf("\e[%iF", y[tail] +1);
             if (x[head] == applex && y[head] == appley) {
                 applex = -1;
