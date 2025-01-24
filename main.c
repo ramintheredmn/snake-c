@@ -20,8 +20,11 @@ int main() {
     // its just the correct types for flags that we try to manipulate with masking and unmask
     struct termios oldt, newt;
     // tcgetattr gets the current settings of the terminal
+    // pass by reference the tcgetattr modifies the oldt value, &oldt is a pointer
     tcgetattr(STDIN_FILENO, &oldt);
+    // pass by value, newt is now an independant copy of the olt both with same type.
     newt = oldt;
+    // clear ICANON and ECHO
     newt.c_lflag &= ~(ICANON | ECHO);
     tcsetattr(STDIN_FILENO, TCSANOW, &newt);
 
@@ -51,7 +54,7 @@ int main() {
         printf("◢\n");
         
         // moves curser to the top 
-        printf("\e[%iA", ROWS + 2);
+        printf("\e[%iA", ROWS  + 2);
         // initialize head and tail variables
         int head = 0, tail = 0;
         // put the snake at the middle
@@ -63,20 +66,28 @@ int main() {
         int applex = -1, appley = 0;
 
         while (!gameover && !quit) {
-            if (applex < 0) {
+            if (applex < 0)
+            {
                 // create the new apple
-                applex = rand() % COLS;
-                appley = rand() % ROWS;
+                applex = rand() % (COLS - 2);
+                appley = rand() % (ROWS - 2);
 
+                for (int i = tail; i != head; i = (i + 1) % 1000)
+                {
+                    if (x[i] == applex && y[i] == appley)
+                    {
+                        applex = -1;
+                    }
+                    if (applex == 0 || applex == COLS - 1 || appley == 0 || appley == ROWS - 1) {
+                        applex = -1;
+                    }
+                    
+                }
 
-                 for (int i = tail; i != head; i = (i + 1) % 1000)
-                  if (x[i] == applex && y[i] == appley)
-                    applex = -1;
-
-                if (applex >= 0) {
+                if (applex > 0) {
                 // draw the apple
-                    printf("\e[%iB\e[%iC*", y[appley] + 1, x[applex] + 1);
-                    printf("\e[%iF", y[appley] + 1);
+                    printf("\e[%iB\e[%iC+", appley + 1, applex + 1);
+                    printf("\e[%iF", appley + 1);
                 }
             }
 
