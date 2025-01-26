@@ -117,7 +117,7 @@ int main() {
             printf("\e[%iF", y[head] +1);
             fflush(stdout);
 
-            usleep(5*1000000 / 60);
+            usleep(10*1000000 / 60);
             // get user input
             struct timeval tv;
             tv.tv_sec = 0;
